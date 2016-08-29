@@ -7,6 +7,7 @@ import (
 )
 
 var Wait sync.WaitGroup
+
 // Oops!
 var Counter int
 
@@ -26,9 +27,8 @@ func Routine(id int) {
 
 	for count := 0; count < 2; count++ {
 
-		value := Counter
-		value++
-		Counter = value
+		Counter++
+
 	}
 
 	Wait.Done()

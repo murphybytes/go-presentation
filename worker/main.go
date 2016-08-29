@@ -7,6 +7,7 @@ import (
 	"sync"
 )
 
+// Do work
 func worker(ch <-chan int, wait *sync.WaitGroup) {
 	defer wait.Done()
 	for {
@@ -23,10 +24,13 @@ func worker(ch <-chan int, wait *sync.WaitGroup) {
 
 }
 
+// Get work, distribute it to workers
 func pool(wg *sync.WaitGroup, workers int, tasks int) {
+	defer wg.Done()
 	ch := make(chan int)
 	// kick off worker goroutines
 	for i := 0; i < workers; i++ {
+		wg.Add(1)
 		go worker(ch, wg)
 	}
 	// send workers work
@@ -41,7 +45,7 @@ func pool(wg *sync.WaitGroup, workers int, tasks int) {
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(5)
+	wg.Add(1)
 	pool(&wg, 5, 25)
 	wg.Wait()
 
